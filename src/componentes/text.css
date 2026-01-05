@@ -1,0 +1,13 @@
+.burbuja{
+    display: flex;
+    align-items: center;
+}
+
+.burbujaName{
+    font-size: 1em;
+    margin-right: 20px;
+}
+
+.burbujaText{
+    background-color: wheat;
+}

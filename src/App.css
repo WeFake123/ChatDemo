@@ -1,0 +1,20 @@
+body{
+    background-color: rgb(202, 189, 189);
+}
+
+.titulo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(127, 255, 212, 0.315);
+}
+
+.formulario{
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
