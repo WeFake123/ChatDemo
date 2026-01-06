@@ -1,0 +1,29 @@
+.btn {
+  border: none; 
+  color: black; 
+  padding: 14px 28px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+  width: 200px;
+  font-size: 1em;
+  
+  
+}
+.success {background-color: rgb(143, 204, 119); border: 2px solid #04AA6D;} 
+.success:hover {background-color: #46a049; color: white;}
+
+.btnContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+        background-color: rgba(145, 80, 211, 0.322);
+}
+
+.postInput{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
