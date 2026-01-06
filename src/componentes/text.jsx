@@ -7,8 +7,8 @@ export const Texto = ({data}) => {
     return(
         <>
 
-        <div class="burbuja">
-            <h2 class="burbujaName">{data.name}</h2>
+        <div className="burbuja">
+            <h2 className="burbujaName">{data.name}</h2>
             <p className="burbujaText">{data.text}</p>    
         </div>      
 

@@ -1,93 +1,101 @@
-
-import { useEffect } from 'react'
-import './App.css'
-import { useState } from 'react';
-
-import { Texto } from './componentes/text';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { Texto } from "./componentes/text";
 
 function App() {
-
-  const [text, setText] = useState([]); // estado para guardar la data
-
+  const [text, setText] = useState([]);
   const [nombre, setNombre] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
 
+  const enviarMensaje = async (e) => {
+    e.preventDefault(); // ⬅️ CLAVE
 
-  const enviarMensaje = (e) => {
-
-    if(nombre == "" || mensaje == ""){
-      return(alert("no se permiten campos vacios"))
+    if (!nombre || !mensaje) {
+      alert("No se permiten campos vacíos");
+      return;
     }
 
-  fetch("http://localhost:3000/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: nombre,
-      text: mensaje,
-    }),
-  })
-    .then(res => res.json())
-    .then(data => {
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nombre,
+          text: mensaje,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Error al enviar el mensaje");
+      }
+
+      const data = await res.json();
       console.log("Mensaje enviado:", data);
+
       setNombre("");
       setMensaje("");
-    })
-    .catch(err => console.log(err));
-};
 
+      // opcional: refrescar mensajes
+      setText((prev) => [...prev, data]);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    fetch("http://localhost:3000/")
-          .then(res => res.json())
-          .then(data =>setText(data))
-          .then(err => console.log(err))
-  }, [])
+    const cargarMensajes = async () => {
+      try {
+        const res = await fetch(API_URL);
 
-  
+        if (!res.ok) {
+          throw new Error("Error al obtener mensajes");
+        }
 
+        const data = await res.json();
+        setText(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    cargarMensajes();
+  }, [API_URL]);
 
   return (
     <>
-    <div class="titulo">
-          <h1>Linea directa con la/el gordi@</h1> <p>nadie puede leer esto (excepto los hackers rusos)</p>
+      <div className="titulo">
+        <h1>Linea directa con la/el gordi@</h1>
+        <p>nadie puede leer esto (excepto los hackers rusos)</p>
+      </div>
 
-    </div>
-    {
+      {text.map((item, index) => (
+        <Texto key={index} data={item} />
+      ))}
 
-        text.map((item, index) => (
-          <Texto key={index} data={item}/>
-        ))
+      <form onSubmit={enviarMensaje} className="formulario">
+        <input
+          type="text"
+          placeholder="Ingrese el nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
 
-    }
+        <input
+          type="text"
+          placeholder="Ingrese el mensaje"
+          value={mensaje}
+          onChange={(e) => setMensaje(e.target.value)}
+        />
 
-    <form onSubmit={enviarMensaje} class="formulario">
-  <input
-    type="text"
-    placeholder="Ingrese el nombre"
-    value={nombre}
-    onChange={(e) => setNombre(e.target.value)}
-  />
-
-  <input
-    type="text"
-    placeholder="Ingrese el mensaje"
-    value={mensaje}
-    onChange={(e) => setMensaje(e.target.value)}
-  />
-
-  <button type="submit">Send</button>
-</form>
-      
-
+        <button type="submit">Send</button>
+      </form>
     </>
-  )
-
-
+  );
 }
-export default App
 
-
+export default App;
