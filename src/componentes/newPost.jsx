@@ -15,25 +15,23 @@ export const NewPost = () => {
 
         <>
             <div className="btnContainer">
-                <button className="btn success" onClick={() => {setAddPost(!addPost), (addPost) ? setNameButton(Name1) : setNameButton(Name2)}}>{nameButton}</button>
+                <button className="btn success" onClick={() => {
+                    setAddPost(prev => {
+                        setNameButton(prev ? Name1 : Name2)
+                        return !prev
+                    })
+                }}>{nameButton}</button>
+                
             </div>
 
             
-                <div className="postInput">
-                {
-                    (addPost) ? 
-
-                    <form>
-                        <input type="text" />Ingrese titulo del Post
-                        <textarea name="" id="">contenido</textarea>
-                        <button>Enviar</button>
-                    </form>
-                    
-                    
-                    
-                    : null
-                }
-                </div>
+            <div className={`postInput ${addPost ? "show" : ""}`}>
+                <form>
+                    <input type="text" placeholder="Ingrese título del post" />
+                    <textarea placeholder="Contenido"></textarea>
+                    <button>Enviar</button>
+                </form>
+            </div>
         </>
     )
 

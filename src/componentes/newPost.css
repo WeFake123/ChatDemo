@@ -27,3 +27,25 @@
     justify-content: center;
     align-items: center;
 }
+
+.postInput {
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -60%) scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+    
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    width: 350px;
+}
+
+.postInput.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
