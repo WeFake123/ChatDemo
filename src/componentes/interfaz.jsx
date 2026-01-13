@@ -1,4 +1,4 @@
-import "./interfaz.css"
+import "./styles/interfaz.css"
 
 export const Interfaz = ({children}) => {
 
@@ -10,8 +10,8 @@ export const Interfaz = ({children}) => {
             </header>
             {children}
 
-            <footer>
-                <h2>asd</h2>
+            <footer className="marquee">
+                <span>Postea! Postea! Postea! Postea! Postea! Postea! Postea! Pene! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Pene! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Pene! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Postea! Pene! Postea! Postea! Postea! Postea! Postea! Postea! Postea!</span>
             </footer>
         
         </>

@@ -1,0 +1,126 @@
+.panel{
+    width: 100%;
+    display: grid;
+        gap: 0;                /* 🔥 sin separación */
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-width: 2500px) {
+    .panel {
+        grid-template-columns: repeat(8, 1fr);
+
+    }
+}
+
+@media (max-width: 2500px) {
+    .panel {
+        grid-template-columns: repeat(8, 1fr);
+
+    }
+}
+
+@media (max-width: 2000px) {
+    .panel {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+}
+
+
+@media (max-width: 1700px) {
+    .panel {
+        grid-template-columns: repeat(6, 1fr);
+
+    }
+}
+
+@media (max-width: 1300px) {
+    .panel {
+        grid-template-columns: repeat(4, 1fr);
+
+    }
+}
+
+@media (max-width: 1000px) {
+    .panel {
+        grid-template-columns: repeat(3, 1fr);
+
+    }
+}
+
+@media (max-width: 700px) {
+    .panel {
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+}
+
+@media (max-width: 300px) {
+    .panel {
+        grid-template-columns: repeat(1, 1fr);
+
+    }
+}
+
+
+.image_panel {
+   aspect-ratio: 1 / 1;   /* 🔥 cuadrado perfecto */
+    width: 100%;   
+        overflow: hidden; /* 🔥 evita que el texto se salga */
+    /* elimina espacios fantasma */
+}
+.imagen_post{
+        width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+
+
+    mask-image:
+        linear-gradient(to right,
+            transparent 0%,
+            black 1%,
+            black 99%,
+            transparent 100%),
+        linear-gradient(to bottom,
+            transparent 0%,
+            black 1%,
+            black 99%,
+            transparent 100%);
+
+    mask-composite: intersect;
+
+    -webkit-mask-image:
+        linear-gradient(to right,
+            transparent 0%,
+            black 1%,
+            black 99%,
+            transparent 100%),
+        linear-gradient(to bottom,
+            transparent 0%,
+            black 1%,
+            black 99%,
+            transparent 100%);
+
+    -webkit-mask-composite: destination-in;
+}
+/* .image_panel:hover{
+    overflow:initial;
+}
+ */
+
+
+img:hover{
+    filter: blur(6px);
+}
+
+.name_post{
+    width: 200px;
+    position: relative;
+    top: -100px;
+    right: -20px;
+    font-family: Arial, Helvetica, sans-serif;
+        color: white;                /* color base */
+    mix-blend-mode: difference;
+}

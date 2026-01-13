@@ -5,31 +5,34 @@ import { Texto } from "./componentes/text";
 import { Interfaz } from "./componentes/interfaz";
 import {NewPost} from "./componentes/newPost"
 import { Panel } from "./componentes/panel";
+import { Post } from "./componentes/post";
 
 
   
 export const API_URL = "http://localhost:3000/";
 
 function App() {
-  const [text, setText] = useState([]);
-
-
-  //  const API_URL = import.meta.env.VITE_API_URL;
-
-
-  //--------
+  const [selectedPost, setSelectedPost] = useState(null);
 
   return (
-    <>
-        <Interfaz>
-        
-              <NewPost/>
+    <Interfaz>
 
-              <Panel/>
+      <NewPost />
 
-              
-        </Interfaz>
-  </>)
+      {!selectedPost && (
+        <Panel setSelectedPost={setSelectedPost} />
+      )}
+
+      {selectedPost && (
+        <Post
+          post={selectedPost}
+          onClose={() => setSelectedPost(null)}
+        />
+      )}
+
+    </Interfaz>
+  );
 }
+
 
 export default App;

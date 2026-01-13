@@ -21,12 +21,13 @@
         background-color: rgba(145, 80, 211, 0.322);
 }
 
-.postInput{
+/* .postInput{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-}
+} */
 
 .postInput {
     position: fixed;
@@ -41,11 +42,27 @@
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    width: 350px;
+    width: 550px;
+
+
+
 }
 
 .postInput.show {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
     pointer-events: auto;
+}
+
+
+.formInput{
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.contenidosInput{
+    background-color: #cca7e271;
+    padding: 10px;
+    margin: 10px;
 }

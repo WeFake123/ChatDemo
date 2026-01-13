@@ -1,4 +1,4 @@
-import "./text.css"
+import "./styles/text.css"
 
 export const Texto = ({data}) => {
 

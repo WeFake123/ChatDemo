@@ -1,5 +1,8 @@
-import { useState } from "react"
-import "./newPost.css"
+import { useEffect, useState } from "react"
+import "./styles/newPost.css"
+import { API_URL } from "../App";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 export const NewPost = () => {
 
@@ -9,11 +12,70 @@ export const NewPost = () => {
     const[addPost, setAddPost] = useState(false);
 
 
+    const[titlePost, setTitlePost] = useState("");
+    const[imagePost, setImagePost] = useState(null);
+    const[contentPost, setContentPost] = useState("");
+
+const submitPost = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("name", titlePost);
+  formData.append("text", contentPost);
+
+  if (imagePost) {
+    formData.append("image", imagePost);
+  }
+
+  if(!titlePost){
+    toast.error('Debes agregar un titulo');
+    return
+  }
+  if(!imagePost){
+    toast.error("Necesitas agregar una imagen");
+    return
+  }
+  if(!contentPost){
+    toast.error("Necesitas agregar un texto");
+    return
+  }
+
+
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      body: formData, // 👈 NO headers
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al crear el post");
+    }
+
+    const data = await response.json();
+    console.log("Post creado:", data);
+
+    setTitlePost("");
+    setImagePost(null);
+    setContentPost("");
+    setAddPost(false);
+    setNameButton(Name1);
+
+    toast.success('Posted')
+  } catch (error) {
+    toast.error("Error")
+    console.error(error);
+  }
+};
+
+
+
 
 
     return(
 
         <>
+          <div><Toaster/></div>
             <div className="btnContainer">
                 <button className="btn success" onClick={() => {
                     setAddPost(prev => {
@@ -26,10 +88,15 @@ export const NewPost = () => {
 
             
             <div className={`postInput ${addPost ? "show" : ""}`}>
-                <form>
-                    <input type="text" placeholder="Ingrese título del post" />
-                    <textarea placeholder="Contenido"></textarea>
-                    <button>Enviar</button>
+                <form onSubmit={submitPost} className="formInput">
+
+                    <input className="contenidosInput" type="text" placeholder="Ingrese título del post"  value={titlePost} onChange={(e) => setTitlePost(e.target.value)}/>
+
+                    <input className="contenidosInput" type="file" name="image" accept="image/*" placeholder="Ingrese la direccion de la imagen" onChange={(e) => setImagePost(e.target.files[0])}/>
+
+                    <textarea className="contenidosInput" placeholder="Contenido" value={contentPost} onChange={(e) => setContentPost(e.target.value)}></textarea>
+ 
+                    <button type="submit" >Enviar</button>
                 </form>
             </div>
         </>

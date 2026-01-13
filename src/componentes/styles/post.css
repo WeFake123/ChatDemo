@@ -1,0 +1,53 @@
+
+.postInterfaz{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    overflow: hidden;
+}
+
+.postInterfaz > *{
+    flex: 1;
+}
+
+
+
+.post{
+    margin-top: 25px;
+    background-color: rgba(137, 43, 226, 0.589);
+    margin: 30px;
+    display: flex;
+
+    
+}
+
+.postImage{
+    margin-left: 20px;
+}
+
+.titlePost{
+    color: white;
+    margin-left: 20px;
+}
+
+.textPost{
+    display: grid;
+    align-items: end;
+    max-width: 25%;
+    margin: 20px;
+
+    
+}
+
+.text{
+
+    font-family:Arial, Helvetica, sans-serif ;
+
+    color: white;
+     word-break: break-word;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    background-color: rgba(29, 11, 46, 0.507);
+
+}

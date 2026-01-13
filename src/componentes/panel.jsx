@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../App";
+import { Post } from "./post"
 
-import "./panel.css"
 
-export const Panel = () => {
+import "./styles/panel.css"
+
+export const Panel = ({ setSelectedPost }) => {
     const [posts, setPosts] = useState([]);
+
 
     useEffect(() => {
         fetch(API_URL)
@@ -13,17 +16,29 @@ export const Panel = () => {
             .catch(err => console.error(err));
     }, []);
 
+    const reversed = [];
+
+    for (let i = posts.length - 1; i >= 0; i--) {
+    reversed.push(posts[i]);
+    }
+
+
+
+
+
     return (
 
         
         <div className="panel">
-            {posts.map(post => (
 
-                <div className="image_panel" key={post.id}>
+            {
+            reversed.map(post => (
+
+                <div className="image_panel" onClick={() => setSelectedPost(post)} key={post.id}>
 
                     {post.image && (
-                        <img
-                            src={post.image}
+                        <img className="imagen_post"
+                            src={`${API_URL.replace(/\/$/, "")}/${post.image}`}
                             alt="post"
                             width={"250px"}
                             height={"250px"}
@@ -32,6 +47,7 @@ export const Panel = () => {
                     <h2 className="name_post" >{post.name}</h2>
                 </div>
             ))}
+
         </div>
     );
 };
