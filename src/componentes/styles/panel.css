@@ -120,7 +120,10 @@ img:hover{
     position: relative;
     top: -100px;
     right: -20px;
-    font-family: Arial, Helvetica, sans-serif;
-        color: white;                /* color base */
+    color: white;                /* color base */
     mix-blend-mode: difference;
+    font-family: "Source Code Pro", monospace;
+    align-items: center;
+    justify-content: center;
+
 }

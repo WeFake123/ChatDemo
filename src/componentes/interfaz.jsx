@@ -2,11 +2,12 @@ import "./styles/interfaz.css"
 
 export const Interfaz = ({children}) => {
 
+
     return(
         <>
             <header>
 
-                <h1 className="badeen-display-regular">Posted</h1>
+                <h1 className="badeen-display-regular"   onClick={() => window.location.reload()}>Posted</h1>
             </header>
             {children}
 

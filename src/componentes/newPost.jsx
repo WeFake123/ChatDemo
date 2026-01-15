@@ -4,11 +4,10 @@ import { API_URL } from "../App";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 
+
 export const NewPost = () => {
 
-    const Name1 = "Add Post";
-    const Name2 = "Close Window"
-    const[nameButton, setNameButton] = useState("Add Post");
+
     const[addPost, setAddPost] = useState(false);
 
 
@@ -16,12 +15,16 @@ export const NewPost = () => {
     const[imagePost, setImagePost] = useState(null);
     const[contentPost, setContentPost] = useState("");
 
+
+  //----------------------------------------------
 const submitPost = async (e) => {
   e.preventDefault();
 
   const formData = new FormData();
   formData.append("name", titlePost);
   formData.append("text", contentPost);
+
+  console.log(titlePost.value)
 
   if (imagePost) {
     formData.append("image", imagePost);
@@ -40,8 +43,6 @@ const submitPost = async (e) => {
     return
   }
 
-
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -59,7 +60,6 @@ const submitPost = async (e) => {
     setImagePost(null);
     setContentPost("");
     setAddPost(false);
-    setNameButton(Name1);
 
     toast.success('Posted')
   } catch (error) {
@@ -68,6 +68,13 @@ const submitPost = async (e) => {
   }
 };
 
+  //-----------------------------------------------------------
+
+  const validateTitle = (e) => {
+
+    e.length > 19 ?     toast.error('Capacidad maxima 20 caracteres') : null
+
+  }
 
 
 
@@ -79,18 +86,21 @@ const submitPost = async (e) => {
             <div className="btnContainer">
                 <button className="btn success" onClick={() => {
                     setAddPost(prev => {
-                        setNameButton(prev ? Name1 : Name2)
+
                         return !prev
                     })
-                }}>{nameButton}</button>
+                }}>Add Post</button>
                 
             </div>
 
             
             <div className={`postInput ${addPost ? "show" : ""}`}>
+
                 <form onSubmit={submitPost} className="formInput">
 
-                    <input className="contenidosInput" type="text" placeholder="Ingrese título del post"  value={titlePost} onChange={(e) => setTitlePost(e.target.value)}/>
+                    <input className="contenidosInput" type="text" placeholder="Ingrese título del post" maxLength={20} value={titlePost} onChange={(e) => {
+                                setTitlePost(e.target.value);
+                                validateTitle(e.target.value)}}/>
 
                     <input className="contenidosInput" type="file" name="image" accept="image/*" placeholder="Ingrese la direccion de la imagen" onChange={(e) => setImagePost(e.target.files[0])}/>
 
@@ -98,6 +108,13 @@ const submitPost = async (e) => {
  
                     <button type="submit" >Enviar</button>
                 </form>
+                  <div className="btnContainer">
+                    <button className="btn btn-warning" onClick={() => {
+                        setAddPost(prev => {
+                            return !prev
+                        })
+                    }}>Close</button>
+                 </div>
             </div>
         </>
     )

@@ -30,27 +30,26 @@
 } */
 
 .postInput {
-    position: fixed;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -60%) scale(0.8);
+    position: fixed;          /* 🔥 se superpone a TODO */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0,0,0,0.6); /* fondo oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.4s ease;
-    
-    background-color: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    width: 550px;
+    transition: opacity 0.3s ease;
 
-
-
+    z-index: 1000;             /* 🔥 por encima de todo */
 }
 
 .postInput.show {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
     pointer-events: auto;
 }
 
@@ -62,7 +61,13 @@
 }
 
 .contenidosInput{
+    color: white;
     background-color: #cca7e271;
     padding: 10px;
     margin: 10px;
+}
+
+.contenidosInput::placeholder {
+    color: #ffffff;
+    opacity: 1; /* importante para Firefox */
 }

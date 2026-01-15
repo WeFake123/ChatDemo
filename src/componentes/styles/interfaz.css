@@ -35,10 +35,21 @@ footer{
 
 
 .badeen-display-regular {
-        font-size: 60px;
+          font-size: 60px;
   font-family: "Badeen Display", system-ui;
   font-weight: 400;
   font-style: normal;
+    cursor: pointer;              /* 👆 mano */
+    transition: 
+        transform 0.2s ease,
+        color 0.2s ease,
+        text-shadow 0.2s ease;
+}
+
+.badeen-display-regular:hover {
+    color: #4caf50;               /* cambia color */
+    transform: scale(1.05);       /* crece un poco */
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 
