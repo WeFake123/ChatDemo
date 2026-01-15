@@ -84,37 +84,54 @@ const submitPost = async (e) => {
         <>
           <div><Toaster/></div>
             <div className="btnContainer">
+
+
                 <button className="btn success" onClick={() => {
                     setAddPost(prev => {
 
                         return !prev
                     })
                 }}>Add Post</button>
-                
+
             </div>
 
-            
+
             <div className={`postInput ${addPost ? "show" : ""}`}>
+              
+
 
                 <form onSubmit={submitPost} className="formInput">
-
+                                                      <span className="btn2 material-symbols-outlined warning" onClick={() => {
+                            setAddPost(prev => {
+                                return !prev
+                            })
+                        }}> close</span>
+                    <h2 className="h2Formulario">Titulo</h2>
                     <input className="contenidosInput" type="text" placeholder="Ingrese título del post" maxLength={20} value={titlePost} onChange={(e) => {
                                 setTitlePost(e.target.value);
                                 validateTitle(e.target.value)}}/>
-
+                    <h2 className="h2Formulario">Imagen</h2>
                     <input className="contenidosInput" type="file" name="image" accept="image/*" placeholder="Ingrese la direccion de la imagen" onChange={(e) => setImagePost(e.target.files[0])}/>
+                      <h2 className="h2Formulario">Contenido</h2>
+                    <textarea className="contenidosInput textArea" placeholder="Ingrese el contenido del post" value={contentPost} onChange={(e) => setContentPost(e.target.value)}></textarea>
+                          
+                    
+                      <button type="submit" className="btn3 success">
+                            Postear 
+                      </button>
 
-                    <textarea className="contenidosInput" placeholder="Contenido" value={contentPost} onChange={(e) => setContentPost(e.target.value)}></textarea>
- 
-                    <button type="submit" >Enviar</button>
-                </form>
-                  <div className="btnContainer">
-                    <button className="btn btn-warning" onClick={() => {
-                        setAddPost(prev => {
-                            return !prev
-                        })
-                    }}>Close</button>
-                 </div>
+                                    
+                                    
+
+
+                
+                        </form>
+
+
+
+                
+                    
+             
             </div>
         </>
     )
