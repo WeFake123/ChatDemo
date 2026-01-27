@@ -15,7 +15,7 @@ export const Panel = ({ setSelectedPost }) => {
             .then(data => setPosts(data))
             .catch(err => console.error(err));
     }, []);
-
+    console.log(posts)
     const reversed = [];
 
     for (let i = posts.length - 1; i >= 0; i--) {
@@ -38,7 +38,7 @@ export const Panel = ({ setSelectedPost }) => {
 
                     {post.image && (
                         <img className="imagen_post"
-                            src={`${API_URL.replace(/\/$/, "")}/${post.image}`}
+                            src={`${API_URL.replace(/\/$/, "")}/uploads/${post.image}`}
                             alt="post"
                             width={"250px"}
                             height={"250px"}

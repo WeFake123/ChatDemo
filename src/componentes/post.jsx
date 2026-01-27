@@ -9,23 +9,29 @@ export const Post = ({ post, onClose }) => {
     <div className="postInterfaz">
         <div className="post">
                   <div>
-                    <button onClick={onClose}>Cerrar</button>
+                    
+                    <span className="btn2 material-symbols-outlined warning" onClick={onClose}>close</span>
                     <h1 className="titlePost">{post.name}</h1>
-                    <img className="postImage" src={`${API_URL.replace(/\/$/, "")}/${post.image}`}
-                                          alt="post"
-                                          width={"450px"}
-                                          height={"450px"}/>
+
                   </div>
                   <div className="textPost">
+
+                                        <img className="postImage"                             
+                                          src={`${API_URL.replace(/\/$/, "")}/uploads/${post.image}`}
+                                          alt="post"
+                                          width={"400px"}
+                                          height={"400px"}/>
                        <p className="text">{post.text}</p>
                   </div>
 
         </div>
 
-        <div>
-          <h1>Chat</h1>
+        <div className="chat">
+            <form action={() => console.log("hola")}>
+                <input className="contenidosInput" type="text" placeholder="Comenta el post"/>
+                <button>Enviar</button>
+            </form>                   
         </div>
-
     </div>
   );
 };

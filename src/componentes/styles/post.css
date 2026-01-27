@@ -1,28 +1,38 @@
 
 .postInterfaz{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border: 1px solid black;
     overflow: hidden;
+        margin-top: 25px;
+
+
 }
 
 .postInterfaz > *{
     flex: 1;
+    margin-bottom: 100px;
 }
 
 
+.chat{
+    padding: 20px;
+    max-width: 40%;
+    border: 1px solid black;
+    background-color: rgba(137, 43, 226, 0.226);
+    border: 2px solid rgba(145, 80, 211, 0.315);
+
+}
 
 .post{
-    margin-top: 25px;
-    background-color: rgba(137, 43, 226, 0.589);
-    margin: 30px;
     display: flex;
-
-    
+    flex-direction: column;
 }
 
 .postImage{
-    margin-left: 20px;
+  float: left;              /* 🔥 CLAVE */
+  margin: 0 15px 10px 0;    /* espacio entre imagen y texto */
+  border-radius: 8px;
 }
 
 .titlePost{
@@ -31,15 +41,13 @@
 }
 
 .textPost{
-    display: grid;
-    align-items: end;
-    max-width: 25%;
-    margin: 20px;
-
-    
+ width: 100%;
 }
 
 .text{
+    margin: 15px;
+  line-height: 1.6;
+  font-size: 16px;
 
     font-family:Arial, Helvetica, sans-serif ;
 
@@ -48,6 +56,15 @@
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    background-color: rgba(29, 11, 46, 0.507);
 
 }
+
+span{
+    margin: 10px;
+}
+
+.contenidosInput {
+
+    background-color: rgba(145, 80, 211, 0.829);
+    border: 1px solid rgba(255, 255, 255, 0.418);
+    }

@@ -23,12 +23,8 @@ const submitPost = async (e) => {
   const formData = new FormData();
   formData.append("name", titlePost);
   formData.append("text", contentPost);
-
-  console.log(titlePost.value)
-
-  if (imagePost) {
-    formData.append("image", imagePost);
-  }
+  formData.append("image", imagePost);
+  console.log(formData)
 
   if(!titlePost){
     toast.error('Debes agregar un titulo');
