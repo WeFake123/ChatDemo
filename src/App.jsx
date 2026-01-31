@@ -9,7 +9,7 @@ import { Post } from "./componentes/post";
 
 
   
-export const API_URL = "http://localhost:3000/";
+export const API_URL = "http://localhost:3000";
 
 function App() {
   const [selectedPost, setSelectedPost] = useState(null);

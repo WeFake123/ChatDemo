@@ -4,6 +4,7 @@
         gap: 0;                /* 🔥 sin separación */
     width: 100%;
     height: 100%;
+    margin-bottom: 50px;
 }
 
 @media (min-width: 2500px) {
@@ -118,7 +119,7 @@ img:hover{
 .name_post{
     width: 200px;
     position: relative;
-    top: -100px;
+    top: -115px;
     right: -20px;
     color: white;                /* color base */
     mix-blend-mode: difference;

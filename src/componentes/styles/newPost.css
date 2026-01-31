@@ -103,6 +103,7 @@ max-width: 20px;
 }
 
 .contenidosInput{
+
   color: white;
         border: 1px solid #8707ff;
     font-family: Arial, Helvetica, sans-serif;
@@ -110,6 +111,8 @@ max-width: 20px;
   padding: 10px 25px;
   background: transparent;
   width: 90%;
+        background-color: rgba(145, 80, 211, 0.329);
+
 }
 
 .textArea{

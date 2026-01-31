@@ -10,7 +10,7 @@ export const Panel = ({ setSelectedPost }) => {
 
 
     useEffect(() => {
-        fetch(API_URL)
+        fetch(`${API_URL}/inicio`)
             .then(res => res.json())
             .then(data => setPosts(data))
             .catch(err => console.error(err));

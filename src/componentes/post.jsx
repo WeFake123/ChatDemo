@@ -1,9 +1,57 @@
 import "./styles/post.css"
 import { API_URL } from "../App";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
+
 
 export const Post = ({ post, onClose }) => {
 
-    console.log(post)
+
+  const[msj, setMsj] = useState("");
+  const[chats, setChats] = useState([])
+  
+  useEffect(() => {
+         fetch(`${API_URL}/inicio/${post.id}`)
+             .then(res => res.json())
+             .then(data => setChats(data))
+             .catch(err => console.error(err));
+     }, []);
+
+
+
+  console.log(chats)
+
+
+  const comentar = async (e) => {
+
+  e.preventDefault();
+
+      if(msj.length == 0){
+        toast.error("Debes escribir algo");
+        return
+      }
+
+
+    try {
+    const response = await fetch(`${API_URL}/inicio/${post.id}`, {
+      method: "POST",
+      body: JSON.stringify({ data: msj, idPost: post.id}),
+    headers: {
+      "Content-Type": "application/json"
+    }
+    });
+
+    const data = await response.json();
+    console.log("comentario creado:", data);
+    toast.success('Comentario enviado')
+
+  }catch (error) {
+    console.error(error);
+  }
+}
+
+
 
   return (
     <div className="postInterfaz">
@@ -27,10 +75,17 @@ export const Post = ({ post, onClose }) => {
         </div>
 
         <div className="chat">
-            <form action={() => console.log("hola")}>
-                <input className="contenidosInput" type="text" placeholder="Comenta el post"/>
-                <button>Enviar</button>
-            </form>                   
+            <form className="formChat-post" onSubmit={comentar}>
+                <input className="contenidosInput-post" type="text" placeholder="Comenta el post" value={msj} onChange={(e) => setMsj(e.target.value)}/>
+                <button className="botonEnviar-post">Enviar</button>    
+            </form> 
+
+            <div>
+
+              {chats.map(({data,id}) => <p className="mensaje" key={id}>{data}</p>)}
+
+            </div>
+
         </div>
     </div>
   );

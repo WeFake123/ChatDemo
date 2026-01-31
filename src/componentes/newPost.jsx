@@ -40,7 +40,7 @@ const submitPost = async (e) => {
   }
 
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/inicio`, {
       method: "POST",
       body: formData, // 👈 NO headers
     });
@@ -68,7 +68,7 @@ const submitPost = async (e) => {
 
   const validateTitle = (e) => {
 
-    e.length > 19 ?     toast.error('Capacidad maxima 20 caracteres') : null
+    e.length > 36 ?     toast.error('Capacidad maxima 35 caracteres') : null
 
   }
 
@@ -103,7 +103,7 @@ const submitPost = async (e) => {
                             })
                         }}> close</span>
                     <h2 className="h2Formulario">Titulo</h2>
-                    <input className="contenidosInput" type="text" placeholder="Ingrese título del post" maxLength={20} value={titlePost} onChange={(e) => {
+                    <input className="contenidosInput" type="text" placeholder="Ingrese título del post" maxLength={35} value={titlePost} onChange={(e) => {
                                 setTitlePost(e.target.value);
                                 validateTitle(e.target.value)}}/>
                     <h2 className="h2Formulario">Imagen</h2>
