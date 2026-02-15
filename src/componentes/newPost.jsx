@@ -49,7 +49,14 @@ const submitPost = async (e) => {
       throw new Error("Error al crear el post");
     }
 
+    
+
+
     const data = await response.json();
+        if (response.status === 429) {
+      toast.error(data.message); // 🔥 mensaje de espera
+      return;
+    }
     console.log("Post creado:", data);
 
     setTitlePost("");

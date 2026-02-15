@@ -1,13 +1,39 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../App";
 import { Post } from "./post"
+import { API_URL } from "../../config";
+import { io } from "socket.io-client";
 
+
+const socket = io(API_URL);
 
 import "./styles/panel.css"
 
+
+
 export const Panel = ({ setSelectedPost }) => {
     const [posts, setPosts] = useState([]);
+    const [newPost, setNewPost] = useState([])
+    const [isNewPost, setIsNewPost] = useState(false)
 
+
+
+    useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Conectado al servidor: post", socket.id);
+    });
+
+    socket.on("nuevo_post", (nuevoPost) => {
+      console.log("post recibido en front:", nuevoPost);
+      setNewPost(prev => [...prev, nuevoPost]);
+      setIsNewPost(true)
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("nuevo_post");
+    };
+
+  }, []);
 
     useEffect(() => {
         fetch(`${API_URL}/inicio`)
@@ -28,8 +54,22 @@ export const Panel = ({ setSelectedPost }) => {
 
     return (
 
-        
+        <div>
+
+            {isNewPost ? <p onClick={() =>  {setIsNewPost(false);
+                                            setPosts(prev => [...prev, ...newPost]);
+                                            console.log(newPost);
+                                            setNewPost([]);}
+            }>Cargar nuevos Post</p> : null}
+            
+
+
+
         <div className="panel">
+            
+
+
+
 
             {
             reversed.map(post => (
@@ -49,5 +89,7 @@ export const Panel = ({ setSelectedPost }) => {
             ))}
 
         </div>
+        </div>
+        
     );
 };

@@ -154,20 +154,33 @@ const comentar = async (e) => {
         <div className="chat-mensajes">
           {isNewChat ? <p onClick={ () => {setIsNewChat(false)
             setChats(prev => [...prev, ...newChats]);
+            setNewChats([]);
             console.log(chats)
 }
            }>Cargar mensajes nuevos</p>: null  }
-          {reversedChats.map(({ data, id, serial, replyTo }) => (
+          {reversedChats.map(({ data, id, serial, replyTo, image }) => (
             <div className="mensaje" key={id} id={`chat-${serial}`}>
+
+
+              {console.log(image)}
+
               <p className="mensaje-serial" onClick={() => setReply(serial)}>
                 {`>>${serial}`}
               </p>
+
+
 
               {replyTo &&
                 <p className="mensaje-reply" onClick={() => goToChat(replyTo)}>
                   {`>>${replyTo}`}
                 </p>
               }
+
+                                               {image !== null ? <img
+                                           src={`${API_URL.replace(/\/$/, "")}/uploads/${image}`}
+                                           alt="post"
+                                           width={"250px"}
+                                           height={"250px"}></img>: null}
 
               <p className="mensaje-texto">{data}</p>
             </div>
