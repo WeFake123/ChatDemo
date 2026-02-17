@@ -38,12 +38,27 @@ const submitPost = async (e) => {
     toast.error("Necesitas agregar un texto");
     return
   }
+  if(contentPost.length > 900){
+    toast.error("Maximo de 900 caracteres");
+    return
+  }
 
   try {
     const response = await fetch(`${API_URL}/inicio`, {
       method: "POST",
       body: formData, // 👈 NO headers
     });
+
+        console.log(response.status);
+
+        
+    if (response.status === 429) {
+      const data = await response.json();
+      toast.error(data.message); // 🔥 mensaje de espera
+      return;
+    }
+
+
 
     if (!response.ok) {
       throw new Error("Error al crear el post");
@@ -53,10 +68,8 @@ const submitPost = async (e) => {
 
 
     const data = await response.json();
-        if (response.status === 429) {
-      toast.error(data.message); // 🔥 mensaje de espera
-      return;
-    }
+
+
     console.log("Post creado:", data);
 
     setTitlePost("");

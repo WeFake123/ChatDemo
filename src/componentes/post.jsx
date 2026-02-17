@@ -24,7 +24,6 @@ export const Post = ({ post, onClose }) => {
     });
 
     socket.on("nuevo_mensaje", (nuevoChat) => {
-      console.log("Mensaje recibido en front:", nuevoChat);
       setNewChats(prev => [...prev, nuevoChat]);
       setIsNewChat(true)
     });
@@ -150,19 +149,19 @@ const comentar = async (e) => {
 
           <button className="botonEnviar-post">Enviar</button>
         </form>
-
+        <div>
         <div className="chat-mensajes">
-          {isNewChat ? <p onClick={ () => {setIsNewChat(false)
+          <div className="cargarPost-contenedor">
+          {isNewChat ? <p className="cargarPost" onClick={ () => {setIsNewChat(false)
             setChats(prev => [...prev, ...newChats]);
             setNewChats([]);
-            console.log(chats)
 }
            }>Cargar mensajes nuevos</p>: null  }
+           </div>
+           
           {reversedChats.map(({ data, id, serial, replyTo, image }) => (
             <div className="mensaje" key={id} id={`chat-${serial}`}>
 
-
-              {console.log(image)}
 
               <p className="mensaje-serial" onClick={() => setReply(serial)}>
                 {`>>${serial}`}
@@ -184,7 +183,9 @@ const comentar = async (e) => {
 
               <p className="mensaje-texto">{data}</p>
             </div>
+            
           ))}
+          </div>
         </div>
 
       </div>

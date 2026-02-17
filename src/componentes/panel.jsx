@@ -55,13 +55,13 @@ export const Panel = ({ setSelectedPost }) => {
     return (
 
         <div>
-
-            {isNewPost ? <p onClick={() =>  {setIsNewPost(false);
+            <div className="cargarPost-contenedor">
+            {isNewPost ? <p className="cargarPost" onClick={() =>  {setIsNewPost(false);
                                             setPosts(prev => [...prev, ...newPost]);
                                             console.log(newPost);
                                             setNewPost([]);}
             }>Cargar nuevos Post</p> : null}
-            
+            </div>
 
 
 
