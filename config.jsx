@@ -1,1 +1,1 @@
-export const API_URL = "https://chat-demo-ashy-pi.vercel.app/";
+export const API_URL = "https://chatdemobackend.onrender.com";
