@@ -78,7 +78,7 @@ export const Panel = ({ setSelectedPost }) => {
 
                     {post.image && (
                         <img className="imagen_post"
-                            src={`${API_URL.replace(/\/$/, "")}/uploads/${post.image}`}
+                            src={post.image}
                             alt="post"
                             width={"250px"}
                             height={"250px"}

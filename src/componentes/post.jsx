@@ -43,6 +43,7 @@ export const Post = ({ post, onClose }) => {
       .catch(err => console.error(err));
   }, [post.id]);
 
+  console.log(chats)
   const reversedChats = [...chats].reverse();
 
 const comentar = async (e) => {
@@ -63,31 +64,59 @@ const comentar = async (e) => {
   }
 
   try {
-    const formData = new FormData();
+    let imageUrl = null;
 
-    formData.append("data", msj);
-    formData.append("idPost", post.id);
-    formData.append("serial", serialMsj);
-    formData.append("replyTo", reply);
-
+    // 🔥 1️⃣ Si hay imagen, subir a Cloudinary
     if (ImagePost) {
-      formData.append("image", ImagePost);
+      const cloudFormData = new FormData();
+      cloudFormData.append("file", ImagePost);
+      cloudFormData.append("upload_preset", "mi_preset_unsigned");
+      cloudFormData.append("folder", "chats");
+
+      const cloudResponse = await fetch(
+        "https://api.cloudinary.com/v1_1/drgnllwbv/image/upload",
+        {
+          method: "POST",
+          body: cloudFormData,
+        }
+      );
+
+      const cloudData = await cloudResponse.json();
+
+      if (!cloudResponse.ok) {
+        throw new Error("Error subiendo imagen");
+      }
+
+      imageUrl = cloudData.secure_url;
     }
 
+    // 🔥 2️⃣ Enviar JSON al backend
     const response = await fetch(`${API_URL}/inicio/${post.id}`, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: msj,
+        idPost: post.id,
+        serial: serialMsj,
+        replyTo: reply,
+        image: imageUrl,
+      }),
     });
 
-    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error enviando comentario");
+    }
 
-    toast.success("Comentario enviado");
+    toast.success("Comentario enviado 🚀");
     setMsj("");
     setReply("");
     setImagePost(null);
 
   } catch (error) {
     console.error(error);
+    toast.error("Error");
   }
 };
 
@@ -115,7 +144,7 @@ const comentar = async (e) => {
         <div className="textPost">
           <img
             className="postImage"
-            src={`${API_URL.replace(/\/$/, "")}/uploads/${post.image}`}
+            src={post.image}
             alt="post"
             width={"500px"}
             height={"500px"}
@@ -175,8 +204,10 @@ const comentar = async (e) => {
                 </p>
               }
 
-                                               {image !== null ? <img
-                                           src={`${API_URL.replace(/\/$/, "")}/uploads/${image}`}
+                                            {image !== null ? 
+                                            
+                                            <img
+                                          src={image}
                                            alt="post"
                                            width={"250px"}
                                            height={"250px"}></img>: null}

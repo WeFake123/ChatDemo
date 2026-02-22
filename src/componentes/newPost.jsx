@@ -20,55 +20,73 @@ export const NewPost = () => {
 const submitPost = async (e) => {
   e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("name", titlePost);
-  formData.append("text", contentPost);
-  formData.append("image", imagePost);
-  console.log(formData)
+  if (!titlePost) {
+    toast.error("Debes agregar un titulo");
+    return;
+  }
 
-  if(!titlePost){
-    toast.error('Debes agregar un titulo');
-    return
-  }
-  if(!imagePost){
+  if (!imagePost) {
     toast.error("Necesitas agregar una imagen");
-    return
+    return;
   }
-  if(!contentPost){
+
+  if (!contentPost) {
     toast.error("Necesitas agregar un texto");
-    return
+    return;
   }
-  if(contentPost.length > 900){
+
+  if (contentPost.length > 900) {
     toast.error("Maximo de 900 caracteres");
-    return
+    return;
   }
 
   try {
-    const response = await fetch(`${API_URL}/inicio`, {
-      method: "POST",
-      body: formData, // 👈 NO headers
-    });
+    // 🔥 1️⃣ Subir imagen a Cloudinary
+    const cloudFormData = new FormData();
+    cloudFormData.append("file", imagePost);
+    cloudFormData.append("upload_preset", "mi_preset_unsigned"); // 👈 tu preset
+    cloudFormData.append("folder", "posts");
 
-        console.log(response.status);
+    const cloudResponse = await fetch(
+      "https://api.cloudinary.com/v1_1/drgnllwbv/image/upload",
+      {
+        method: "POST",
+        body: cloudFormData,
+      }
+    );
 
-        
-    if (response.status === 429) {
-      const data = await response.json();
-      toast.error(data.message); // 🔥 mensaje de espera
-      return;
+    const cloudData = await cloudResponse.json();
+
+    if (!cloudResponse.ok) {
+      throw new Error("Error subiendo imagen");
     }
 
+    const imageUrl = cloudData.secure_url;
 
+    // 🔥 2️⃣ Enviar post al backend (YA SIN FormData)
+    const response = await fetch(`${API_URL}/inicio`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: titlePost,
+        text: contentPost,
+        image: imageUrl,
+      }),
+    });
+
+    if (response.status === 429) {
+      const data = await response.json();
+      toast.error(data.message);
+      return;
+    }
 
     if (!response.ok) {
       throw new Error("Error al crear el post");
     }
 
-    
-
-
     const data = await response.json();
-
 
     console.log("Post creado:", data);
 
@@ -77,10 +95,11 @@ const submitPost = async (e) => {
     setContentPost("");
     setAddPost(false);
 
-    toast.success('Posted')
+    toast.success("Posted 🚀");
+
   } catch (error) {
-    toast.error("Error")
     console.error(error);
+    toast.error("Error");
   }
 };
 
@@ -116,7 +135,7 @@ const submitPost = async (e) => {
               
 
 
-                <form onSubmit={submitPost} className="formInput">
+                <form onSubmit={submitPost} className="formInput" encType="multipart/form-data">
                                                       <span className="btn2 material-symbols-outlined warning" onClick={() => {
                             setAddPost(prev => {
                                 return !prev
