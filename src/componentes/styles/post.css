@@ -1,223 +1,295 @@
-.cargarPost:hover{
-    background-color: rgb(142, 160, 223);
-}
-.cargarPost{
+/* ============================= */
+/* BOTÓN CARGAR POST */
+/* ============================= */
+
+.cargarPost-contenedor {
     display: flex;
-    color: white;
-    font-size: 1.2em;
-    background-color: gray;
-    padding: 10px;
-    border-radius: 10px;
+    justify-content: center;
 }
 
-.cargarPost-contenedor{
-    display: flex;
-    width: 100%;
+.cargarPost {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: white;
+    background: #2a2a2a;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.cargarPost:hover {
+    background: #3a3a3a;
+    transform: translateY(-2px);
 }
 
 
-.postInterfaz{
+/* ============================= */
+/* LAYOUT POST + CHAT */
+/* ============================= */
+
+.postInterfaz {
     display: flex;
-    flex-direction: row;
-    border: 1px solid black;
-    overflow: hidden;
-        margin-top: 25px;
-
+    gap: 30px;
+    margin: 30px 0 60px;
 }
-.post{
+
+
+
+.post {
+    flex: 3;
     display: flex;
     flex-direction: column;
-    flex: 4;
-    margin-right: 20px;
-
 }
 
-.chat{
-    padding: 20px;
+
+.chat {
     flex: 2;
-    border: 1px solid black;
-    background-color: rgba(137, 43, 226, 0.226);
-    border: 2px solid rgba(145, 80, 211, 0.315);
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 20px;
+    height: 600px;     /* 🔥 altura fija */
+
 }
-@media (max-width: 1200px) {
+
+/* Responsive */
+@media (max-width: 1100px) {
     .postInterfaz {
-            display: flex;
         flex-direction: column;
-        border: 1px solid black;
-        overflow: hidden;
-            margin-top: 25px;
-            width: 100%;
-            margin-bottom: 50px;
-        }
+    }
 
+    .chat {
+        width: 100%;
+    }
+}
 
-    .chat{
-        margin-top: 20px;
-        align-items: center;
-        justify-content: center;
-        width: 90%;
-        margin-left: 25px;
-    border: 1px solid black;
-    background-color: rgba(137, 43, 226, 0.226);
-    border: 2px solid rgba(145, 80, 211, 0.315);
-    }    
+@media (max-width: 768px) {
+
+    .post-main {
+        flex-direction: column; /* 🔥 apila imagen arriba */
+    }
+
+    .post-main img {
+        width: 100%;
+    }
+
+    .chat-box {
+        max-height: 300px;
+    }
+
+    .chat-message img {
+        max-width: 100%;
+        max-height: 200px;
+    }
 }
 
 
+/* ============================= */
+/* CONTENIDO POST */
+/* ============================= */
 
-
-
-.chat-mensajes{
-         overflow-y: auto; 
-        max-height: 510px;
-        margin-bottom: 5px;
-       
+.postImage {
+ width: 400px;
+    max-width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
 }
 
-
-.formChat-post{
-    width: 100%;
-    display: flex;
-        align-items: center;
-    justify-content: center;
-}
-
-
-
-.postImage{
-  float: left;              /* 🔥 CLAVE */
-  margin: 0 15px 10px 0;    /* espacio entre imagen y texto */
-  border-radius: 8px;
-}
-
-.titlePost{
+.titlePost {
     color: white;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.dataPost {
     margin-left: 20px;
-}
-
-.textPost{
-    margin-left: 20px;
- width: 100%;
-}
-
-.text{
-    margin: 15px;
-  line-height: 1.6;
-  font-size: 16px;
-
-    font-family:Arial, Helvetica, sans-serif ;
-
-    color: white;
-     word-break: break-word;
-    white-space: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-
-}
-
-span{
-    margin: 10px;
-}
-
-.contenidosInput-post{
-    width: 500px;
-    background-color: rgba(145, 80, 211, 0.39);
-    border: 1px solid rgba(255, 255, 255, 0.418);
-    margin-right: 30px;
-    border-radius: 10px;
-    height: 30px;
-    color: white;
-}
-.contenidosInput{
-    width: 150px;
-        margin-right: 30px;
-
-}
-
-
-.botonEnviar-post{
-font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
-font-size: 1em;
-    background-color: rgb(143, 204, 119);
-    border-radius: 10px;
-    height: 35px;
-
-
-}
-
-.botonEnviar-post:hover{
-    background-color: rgb(87, 209, 39);
-}
-
-.mensaje{
     display: flex;
-    color: white;
-    background-color: rgba(145, 80, 211, 0.315);
-    font-size: 1.2em;
-    margin-top: 4px;
+    gap: 30px;
+    align-items: flex-start;
+
+}
+
+.text {
+
+        flex: 1;              /* 🔥 ocupa el espacio restante */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: #e0e0e0;
+    word-break: break-word;
+}
+
+
+/* ============================= */
+/* CHAT */
+/* ============================= */
+
+.chat-mensajes {
+    height: 500px;     /* 🔥 altura fija */
+    overflow-y: auto;      /* 🔥 scroll interno */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-right: 5px;
+    margin-bottom: 20px;
+}
+
+.chat-mensajes img {
+    max-width: 250px;      /* 🔥 límite importante */
+    max-height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Scroll más moderno */
+.chat-mensajes::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-mensajes::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+
+/* ============================= */
+/* INPUT CHAT */
+/* ============================= */
+
+.formChat-post {
+    display: flex;
+    gap: 10px;
     width: 100%;
-
+    margin-bottom: 20px;
 }
 
-.mensaje-serial{
-    color: rgb(26, 224, 26);
-    margin-right: 20px;
-    margin-left: 5px;
-}
-
-.mensaje-reply{
-    color: rgb(243, 40, 5);
-    margin-right: 20px;
-    margin-left: 5px;
-}
-
-.mensaje-reply:hover{
-        color: rgba(224, 56, 26, 0.747);
-
-}
-
-.mensaje-serial:hover{
-    color: rgba(26, 224, 26, 0.479);
-    
-}
-
-.mensaje-texto{
-        word-break: break-word;
-    white-space: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.formChat-reply{
-    display: flex;
-    color: rgb(26, 224, 26);
-
-    
-
-}
-
-.formChat-reply-cancel{
-
-    margin-left: 50px;
+.contenidosInput-post {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #2a2a2a;
+    background: #1a1a1a;
     color: white;
-    background-color: rgb(236, 0, 0);
-    padding: 5px;
+    transition: 0.2s ease;
+}
+
+.contenidosInput-post:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.botonEnviar-post {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #4caf50;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.botonEnviar-post:hover {
+    background: #43a047;
+}
+
+
+/* ============================= */
+/* MENSAJES */
+/* ============================= */
+
+.mensaje {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #ddd;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mensaje-serial {
+    color: #4caf50;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mensaje-serial:hover {
+    opacity: 0.7;
+}
+
+.mensaje-reply {
+    color: #ff4d4d;
+    cursor: pointer;
+}
+
+.mensaje-reply:hover {
+    opacity: 0.7;
+}
+
+.mensaje-texto {
+    word-break: break-word;
+}
+
+
+/* ============================= */
+/* REPLY FORM */
+/* ============================= */
+
+.formChat-reply {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.formChat-reply-text {
+    color: #4caf50;
+}
+
+.formChat-reply-cancel {
+    padding: 4px 10px;
+    background: #d32f2f;
     border-radius: 20px;
-
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: white;
+    transition: 0.2s ease;
 }
 
-.formChat-reply-text{
-    padding: 5px;
-
+.formChat-reply-cancel:hover {
+    background: #b71c1c;
 }
+
+
+/* ============================= */
+/* HIGHLIGHT */
+/* ============================= */
 
 .mensaje:target {
-  background-color: rgba(38, 11, 218, 0.2);
-  transition: background-color 6s;
+    background-color: rgba(76, 175, 80, 0.15);
+    transition: background-color 2s ease;
 }
 
 .highlight {
-  background-color: rgba(120, 100, 255, 0.25);
+    background-color: rgba(76, 175, 80, 0.25);
 }
+
+
+/* ============================= */
+/* SIN COMENTARIOS */
+/* ============================= */
+
+.sinComentariosTexto {
+    margin-top: 20px;
+    color: #aaa;
+    text-align: center;
+}
+
+

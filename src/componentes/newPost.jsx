@@ -1,176 +1,163 @@
-import { useEffect, useState } from "react"
-import "./styles/newPost.css"
-import { API_URL } from "../App";
-import toast from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
-
+import { useState } from "react";
+import "./styles/newPost.css";
+import { API_URL, BD_URL } from "../../config";
+import toast, { Toaster } from "react-hot-toast";
 
 export const NewPost = () => {
 
+  const [addPost, setAddPost] = useState(false);
+  const [titlePost, setTitlePost] = useState("");
+  const [imagePost, setImagePost] = useState(null);
+  const [contentPost, setContentPost] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const[addPost, setAddPost] = useState(false);
+  // ---------------------------------------------------
+  const submitPost = async (e) => {
+    e.preventDefault();
 
+    if (!titlePost.trim()) return toast.error("Debes agregar un título");
+    if (!imagePost) return toast.error("Necesitas agregar una imagen");
+    if (!contentPost.trim()) return toast.error("Necesitas agregar un texto");
+    if (contentPost.length > 900) return toast.error("Máximo de 900 caracteres");
 
-    const[titlePost, setTitlePost] = useState("");
-    const[imagePost, setImagePost] = useState(null);
-    const[contentPost, setContentPost] = useState("");
+    // 🔥 Validar tamaño imagen (5MB)
+    if (imagePost.size > 5 * 1024 * 1024) {
+      return toast.error("La imagen no puede superar 5MB");
+    }
 
+    try {
+      setLoading(true);
 
-  //----------------------------------------------
-const submitPost = async (e) => {
-  e.preventDefault();
+      // 1️⃣ Subir imagen a Cloudinary
+      const cloudFormData = new FormData();
+      cloudFormData.append("file", imagePost);
+      cloudFormData.append("upload_preset", "mi_preset_unsigned");
+      cloudFormData.append("folder", "posts");
 
-  if (!titlePost) {
-    toast.error("Debes agregar un titulo");
-    return;
-  }
-
-  if (!imagePost) {
-    toast.error("Necesitas agregar una imagen");
-    return;
-  }
-
-  if (!contentPost) {
-    toast.error("Necesitas agregar un texto");
-    return;
-  }
-
-  if (contentPost.length > 900) {
-    toast.error("Maximo de 900 caracteres");
-    return;
-  }
-
-  try {
-    // 🔥 1️⃣ Subir imagen a Cloudinary
-    const cloudFormData = new FormData();
-    cloudFormData.append("file", imagePost);
-    cloudFormData.append("upload_preset", "mi_preset_unsigned"); // 👈 tu preset
-    cloudFormData.append("folder", "posts");
-
-    const cloudResponse = await fetch(
-      "https://api.cloudinary.com/v1_1/drgnllwbv/image/upload",
-      {
+      const cloudResponse = await fetch(BD_URL, {
         method: "POST",
         body: cloudFormData,
+      });
+
+      if (!cloudResponse.ok) {
+        throw new Error("Error subiendo imagen");
       }
-    );
 
-    const cloudData = await cloudResponse.json();
+      const cloudData = await cloudResponse.json();
+      const imageUrl = cloudData.secure_url;
 
-    if (!cloudResponse.ok) {
-      throw new Error("Error subiendo imagen");
+      // 2️⃣ Crear post
+      const response = await fetch(`${API_URL}/inicio`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: titlePost.trim(),
+          text: contentPost.trim(),
+          image: imageUrl,
+        }),
+      });
+
+      if (response.status === 429) {
+        const data = await response.json();
+        toast.error(data.message);
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Error al crear el post");
+      }
+
+      await response.json();
+
+      // Reset
+      setTitlePost("");
+      setImagePost(null);
+      setContentPost("");
+      setAddPost(false);
+
+      toast.success("Post creado 🚀");
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al publicar");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const imageUrl = cloudData.secure_url;
-
-    // 🔥 2️⃣ Enviar post al backend (YA SIN FormData)
-    const response = await fetch(`${API_URL}/inicio`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: titlePost,
-        text: contentPost,
-        image: imageUrl,
-      }),
-    });
-
-    if (response.status === 429) {
-      const data = await response.json();
-      toast.error(data.message);
+  // ---------------------------------------------------
+  const handleTitleChange = (value) => {
+    if (value.length > 35) {
+      toast.error("Máximo 35 caracteres");
       return;
     }
+    setTitlePost(value);
+  };
 
-    if (!response.ok) {
-      throw new Error("Error al crear el post");
-    }
+  // ---------------------------------------------------
 
-    const data = await response.json();
+  return (
+    <>
+      <Toaster position="top-right" />
 
-    console.log("Post creado:", data);
+      <div className="btnContainer">
+        <button
+          className="btn btn-success btn-200"
+          onClick={() => setAddPost(prev => !prev)}
+        >
+          Add Post
+        </button>
+      </div>
 
-    setTitlePost("");
-    setImagePost(null);
-    setContentPost("");
-    setAddPost(false);
+      <div
+        className={`postInput ${addPost ? "show" : ""}`}
+        onClick={() => setAddPost(false)}
+      >
+        <form
+          onSubmit={submitPost}
+          className="formInput"
+          onClick={(e) => e.stopPropagation()}
+        >
 
-    toast.success("Posted 🚀");
+<span className="material-symbols-outlined closeBtn" onClick={() => setAddPost(false)}>
+    close
+</span>
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Error");
-  }
+          <h2 className="h2Formulario">Título</h2>
+          <input
+            className="contenidosInput"
+            type="text"
+            placeholder="Ingrese título del post"
+            maxLength={35}
+            value={titlePost}
+            onChange={(e) => handleTitleChange(e.target.value)}
+          />
+
+          <h2 className="h2Formulario">Imagen</h2>
+          <input
+            className="contenidosInput"
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImagePost(e.target.files[0])}
+          />
+
+          <h2 className="h2Formulario">Contenido</h2>
+          <textarea
+            className="contenidosInput textArea"
+            placeholder="Ingrese el contenido del post"
+            maxLength={900}
+            value={contentPost}
+            onChange={(e) => setContentPost(e.target.value)}
+          />
+
+<button type="submit" className="btn-submit" disabled={loading}>
+    {loading ? "Publicando..." : "Postear"}
+</button>
+
+        </form>
+      </div>
+    </>
+  );
 };
-
-  //-----------------------------------------------------------
-
-  const validateTitle = (e) => {
-
-    e.length > 36 ?     toast.error('Capacidad maxima 35 caracteres') : null
-
-  }
-
-
-
-
-    return(
-
-        <>
-          <div><Toaster/></div>
-            <div className="btnContainer">
-
-
-                <button className="btn success" onClick={() => {
-                    setAddPost(prev => {
-
-                        return !prev
-                    })
-                }}>Add Post</button>
-
-            </div>
-
-
-            <div className={`postInput ${addPost ? "show" : ""}`}>
-              
-
-
-                <form onSubmit={submitPost} className="formInput" encType="multipart/form-data">
-                                                      <span className="btn2 material-symbols-outlined warning" onClick={() => {
-                            setAddPost(prev => {
-                                return !prev
-                            })
-                        }}> close</span>
-                    <h2 className="h2Formulario">Titulo</h2>
-                    <input className="contenidosInput" type="text" placeholder="Ingrese título del post" maxLength={35} value={titlePost} onChange={(e) => {
-                                setTitlePost(e.target.value);
-                                validateTitle(e.target.value)}}/>
-                    <h2 className="h2Formulario">Imagen</h2>
-                    <input className="contenidosInput" type="file" name="image" accept="image/*" placeholder="Ingrese la direccion de la imagen" onChange={(e) => setImagePost(e.target.files[0])}/>
-                      <h2 className="h2Formulario">Contenido</h2>
-                    <textarea className="contenidosInput textArea" placeholder="Ingrese el contenido del post" value={contentPost} onChange={(e) => setContentPost(e.target.value)}></textarea>
-                          
-                    
-                      <button type="submit" className="btn3 success">
-                            Postear 
-                      </button>
-
-                                    
-                                    
-
-
-                
-                        </form>
-
-
-
-                
-                    
-             
-            </div>
-        </>
-    )
-
-
-
-}

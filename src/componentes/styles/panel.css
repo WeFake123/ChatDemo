@@ -1,130 +1,119 @@
-.panel{
+/* ============================= */
+/* GRID RESPONSIVE INTELIGENTE */
+/* ============================= */
+
+.panel {
     width: 100%;
     display: grid;
-        gap: 0;                /* 🔥 sin separación */
-    width: 100%;
-    height: 100%;
+    gap: 0;
     margin-bottom: 50px;
+
+    /* 🔥 AUTO RESPONSIVE sin 20 media queries */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
-@media (min-width: 2500px) {
-    .panel {
-        grid-template-columns: repeat(8, 1fr);
 
+/* ============================= */
+/* CARD */
+/* ============================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }
-
-@media (max-width: 2500px) {
-    .panel {
-        grid-template-columns: repeat(8, 1fr);
-
-    }
-}
-
-@media (max-width: 2000px) {
-    .panel {
-    grid-template-columns: repeat(7, 1fr);
-}
-
-}
-
-
-@media (max-width: 1700px) {
-    .panel {
-        grid-template-columns: repeat(6, 1fr);
-
-    }
-}
-
-@media (max-width: 1300px) {
-    .panel {
-        grid-template-columns: repeat(4, 1fr);
-
-    }
-}
-
-@media (max-width: 1000px) {
-    .panel {
-        grid-template-columns: repeat(3, 1fr);
-
-    }
-}
-
-@media (max-width: 700px) {
-    .panel {
-        grid-template-columns: repeat(2, 1fr);
-
-    }
-}
-
-@media (max-width: 300px) {
-    .panel {
-        grid-template-columns: repeat(1, 1fr);
-
-    }
-}
-
 
 .image_panel {
-   aspect-ratio: 1 / 1;   /* 🔥 cuadrado perfecto */
-    width: 100%;   
-        overflow: hidden; /* 🔥 evita que el texto se salga */
-    /* elimina espacios fantasma */
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    cursor: pointer;
+        animation: fadeIn 0.4s ease forwards;
+
 }
-.imagen_post{
-        width: 100%;
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Imagen */
+.imagen_post {
+    width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-
-
-    mask-image:
-        linear-gradient(to right,
-            transparent 0%,
-            black 1%,
-            black 99%,
-            transparent 100%),
-        linear-gradient(to bottom,
-            transparent 0%,
-            black 1%,
-            black 99%,
-            transparent 100%);
-
-    mask-composite: intersect;
-
-    -webkit-mask-image:
-        linear-gradient(to right,
-            transparent 0%,
-            black 1%,
-            black 99%,
-            transparent 100%),
-        linear-gradient(to bottom,
-            transparent 0%,
-            black 1%,
-            black 99%,
-            transparent 100%);
-
-    -webkit-mask-composite: destination-in;
-}
-/* .image_panel:hover{
-    overflow:initial;
-}
- */
-
-
-img:hover{
-    filter: blur(6px);
+    transition: transform 0.4s ease, filter 0.4s ease;
+    padding: 2px;
 }
 
-.name_post{
-    width: 200px;
-    position: relative;
-    top: -115px;
-    right: -20px;
-    color: white;                /* color base */
-    mix-blend-mode: difference;
+/* ============================= */
+/* HOVER SOLO DESKTOP */
+/* ============================= */
+
+@media (hover: hover) {
+    .image_panel:hover .imagen_post {
+        transform: scale(1.05);
+        filter: blur(4px) brightness(0.7);
+    }
+}
+
+/* ============================= */
+/* TÍTULO OVERLAY */
+/* ============================= */
+
+.name_post {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 14px;
     font-family: "Source Code Pro", monospace;
-    align-items: center;
-    justify-content: center;
+    font-size: 14px;
+    color: white;
 
+   
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Mostrar título en desktop al hover */
+@media (hover: hover) {
+    .image_panel:hover .name_post {
+        opacity: 1;
+    }
+}
+
+/* 📱 En móviles siempre visible */
+@media (hover: none) {
+    .name_post {
+        opacity: 1;
+    }
+}
+
+/* ============================= */
+/* SPINNER */
+/* ============================= */
+
+.spinner-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+}
+
+.spinner {
+    width: 70px;
+    height: 70px;
 }

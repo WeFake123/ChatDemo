@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 const socket = io(API_URL);
 
 import "./styles/panel.css"
+import Spinner from 'react-bootstrap/Spinner';
 
 
 
@@ -14,7 +15,7 @@ export const Panel = ({ setSelectedPost }) => {
     const [posts, setPosts] = useState([]);
     const [newPost, setNewPost] = useState([])
     const [isNewPost, setIsNewPost] = useState(false)
-
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
@@ -38,15 +39,17 @@ export const Panel = ({ setSelectedPost }) => {
     useEffect(() => {
         fetch(`${API_URL}/inicio`)
             .then(res => res.json())
-            .then(data => setPosts(data))
-            .catch(err => console.error(err));
+            .then(data => {
+            setPosts(data);
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error(err);
+            setLoading(false);
+        });
     }, []);
     console.log(posts)
-    const reversed = [];
 
-    for (let i = posts.length - 1; i >= 0; i--) {
-    reversed.push(posts[i]);
-    }
 
 
 
@@ -63,16 +66,20 @@ export const Panel = ({ setSelectedPost }) => {
             }>Cargar nuevos Post</p> : null}
             </div>
 
+          {console.log(loading)}
 
+            {loading ?           <div className="spinner-div"> 
+                                        <Spinner animation="border" className="spinner" role="status" variant="light">
+                                        </Spinner> 
+                                    </div>
+                                     : null}
 
         <div className="panel">
             
-
-
-
+  
 
             {
-            reversed.map(post => (
+            posts.map(post => (
 
                 <div className="image_panel" onClick={() => setSelectedPost(post)} key={post.id}>
 

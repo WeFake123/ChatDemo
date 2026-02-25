@@ -6,10 +6,9 @@ import { Interfaz } from "./componentes/interfaz";
 import {NewPost} from "./componentes/newPost"
 import { Panel } from "./componentes/panel";
 import { Post } from "./componentes/post";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
   
-export const API_URL = "https://posted-9ped.onrender.com";
 
 function App() {
   const [selectedPost, setSelectedPost] = useState(null);

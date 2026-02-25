@@ -1,6 +1,6 @@
-body{
-    background-image: url("../4k-black-3840-x-2160-background-rc6l1azrlg604s51.webp");
-
+body {
+    background: radial-gradient(circle at top left, #1f1f2e, #0f0f15);
+    min-height: 100vh;
 }
 
 .titulo{

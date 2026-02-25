@@ -1,79 +1,136 @@
-body{
-    margin: 0%;
+/* ============================= */
+/* ========= VARIABLES ========= */
+/* ============================= */
+
+:root {
+  --color-primary: rgba(145, 80, 211, 0.83);
+  --color-bg: #111;
+  --color-text: #ffffff;
+  --color-accent: #4caf50;
+  --color-marquee: #00ff66;
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-header{
-    width: 100%;
-    background-color: rgba(145, 80, 211, 0.829);
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 
+/* ============================= */
+/* ============ RESET ========== */
+/* ============================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-footer{
-  position: fixed;
-  bottom: 0;
-  left: 0;
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, sans-serif;
+}
 
+
+/* ============================= */
+/* ============ LAYOUT ========= */
+/* ============================= */
+
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+
+/* ============================= */
+/* ============ HEADER ========= */
+/* ============================= */
+
+header {
   width: 100%;
-  height: 30px;
-
-  background-color: #111;
-  color: white;
+  height: 70px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  z-index: 1000;
+  background-color: var(--color-primary);
+  box-shadow: var(--shadow-soft);
 }
 
 
+/* ============================= */
+/* ========= FOOTER ============ */
+/* ============================= */
 
+footer {
+  width: 100%;
+  height: 30px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #000;
+  color: var(--color-text);
+  font-size: 14px;
+
+  
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+}
+
+
+/* ============================= */
+/* ========= LOGO/TITLE ======== */
+/* ============================= */
 
 .badeen-display-regular {
-          font-size: 60px;
   font-family: "Badeen Display", system-ui;
+  font-size: 60px;
   font-weight: 400;
-  font-style: normal;
-    cursor: pointer;              /* 👆 mano */
-    transition: 
-        transform 0.2s ease,
-        color 0.2s ease,
-        text-shadow 0.2s ease;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .badeen-display-regular:hover {
-    color: #4caf50;               /* cambia color */
-    transform: scale(1.05);       /* crece un poco */
-    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  color: var(--color-accent);
+  transform: scale(1.05);
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+
+/* ============================= */
+/* ========= MARQUEE =========== */
+/* ============================= */
 
 .marquee {
   width: 100%;
   overflow: hidden;
-  background: black;
-  color: #00ff66;
+  background: #000;
+  color: var(--color-marquee);
   font-family: monospace;
   padding: 10px 0;
 }
 
 .marquee span {
   display: inline-block;
-  padding-left: 100%;
   white-space: nowrap;
-  animation: scroll 20s linear infinite;
+  padding-left: 100%;
+  animation: marquee-scroll 20s linear infinite;
 }
 
-@keyframes scroll {
-  0% {
+@keyframes marquee-scroll {
+  from {
     transform: translateX(0);
   }
-  100% {
+  to {
     transform: translateX(-100%);
   }
 }
