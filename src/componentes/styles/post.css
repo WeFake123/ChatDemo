@@ -56,35 +56,8 @@
 }
 
 /* Responsive */
-@media (max-width: 1100px) {
-    .postInterfaz {
-        flex-direction: column;
-    }
 
-    .chat {
-        width: 100%;
-    }
-}
 
-@media (max-width: 768px) {
-
-    .post-main {
-        flex-direction: column; /* 🔥 apila imagen arriba */
-    }
-
-    .post-main img {
-        width: 100%;
-    }
-
-    .chat-box {
-        max-height: 300px;
-    }
-
-    .chat-message img {
-        max-width: 100%;
-        max-height: 200px;
-    }
-}
 
 
 /* ============================= */
@@ -92,11 +65,13 @@
 /* ============================= */
 
 .postImage {
- width: 400px;
-    max-width: 100%;
+    max-width: 500px;      /* 🔥 límite importante */
+    max-height: 500px;
     border-radius: 12px;
     object-fit: cover;
 }
+
+
 
 .titlePost {
     color: white;
@@ -293,3 +268,41 @@
 }
 
 
+@media (max-width: 768px) {
+
+    .dataPost {
+        flex-direction: column; /* 🔥 apila imagen arriba */
+    }
+
+
+    .postImage{
+        max-width: 300px;      /* 🔥 límite importante */
+        max-height: 300px;
+    }
+    
+    .chat-box {
+        max-height: 300px;
+    }
+
+    .chat-mensajes img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+
+    
+}
+
+@media (max-width: 1300px) {
+    .postInterfaz {
+        flex-direction: column;
+    }
+
+    .chat {
+        width: 100%;
+    }
+
+    .formChat-post {
+    flex-direction: column;
+}
+}
