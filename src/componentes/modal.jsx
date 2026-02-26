@@ -1,4 +1,4 @@
-import "../componentes/styles/ImageModal.css";
+import "../componentes/styles/imageModal.css";
 
 export const ImageModal = ({ image, onClose }) => {
   if (!image) return null;

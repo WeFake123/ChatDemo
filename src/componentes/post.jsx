@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 import Spinner from "react-bootstrap/Spinner";
-import { ImageModal } from "./modal.jsx";
+import { ImageModal } from "./modal";
 
 
 export const Post = ({ post, onClose }) => {
