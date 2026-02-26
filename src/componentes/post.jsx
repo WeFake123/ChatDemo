@@ -4,6 +4,8 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 import Spinner from "react-bootstrap/Spinner";
+import { ImageModal } from "./modal.jsx";
+
 
 export const Post = ({ post, onClose }) => {
   const socketRef = useRef(null);
@@ -17,6 +19,7 @@ export const Post = ({ post, onClose }) => {
   const [imagePost, setImagePost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   /* ========================= */
   /* SOCKET                    */
@@ -178,7 +181,13 @@ const serialMsj = Date.now().toString().slice(-6);
             className="postImage"
             src={post.image}
             alt={post.name}
+            onClick={() => setSelectedImage(post.image)}
+  style={{ cursor: "pointer" }}
           />
+                <ImageModal
+        image={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
 
           <p className="text">{post.text}</p>
         </div>
@@ -288,8 +297,15 @@ const serialMsj = Date.now().toString().slice(-6);
                     src={image}
                     alt="chat"
                     className="chatImage"
+                    onClick={() => setSelectedImage(image)}
+  style={{ cursor: "pointer" }}
                   />
+                  
                 )}
+                <ImageModal
+        image={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
 
                 <p className="mensaje-texto">{data}</p>
               </div>
