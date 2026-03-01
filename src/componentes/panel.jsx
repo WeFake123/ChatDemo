@@ -20,11 +20,9 @@ export const Panel = ({ setSelectedPost }) => {
 
     useEffect(() => {
     socket.on("connect", () => {
-      console.log("Conectado al servidor: post", socket.id);
     });
 
     socket.on("nuevo_post", (nuevoPost) => {
-      console.log("post recibido en front:", nuevoPost);
       setNewPost(prev => [...prev, nuevoPost]);
       setIsNewPost(true)
     });
@@ -48,7 +46,6 @@ export const Panel = ({ setSelectedPost }) => {
             setLoading(false);
         });
     }, []);
-    console.log(posts)
 
 
 
@@ -61,12 +58,10 @@ export const Panel = ({ setSelectedPost }) => {
             <div className="cargarPost-contenedor">
             {isNewPost ? <p className="cargarPost" onClick={() =>  {setIsNewPost(false);
                                             setPosts(prev => [...prev, ...newPost]);
-                                            console.log(newPost);
                                             setNewPost([]);}
             }>Cargar nuevos Post</p> : null}
             </div>
 
-          {console.log(loading)}
 
             {loading ?           <div className="spinner-div"> 
                                         <Spinner animation="border" className="spinner" role="status" variant="light">
