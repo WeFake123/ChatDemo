@@ -1,97 +1,114 @@
 import { useEffect, useState } from "react";
-import { Post } from "./post"
+import { Link } from "react-router-dom";
 import { API_URL } from "../../config";
 import { io } from "socket.io-client";
-
+import Spinner from "react-bootstrap/Spinner";
+import "./styles/panel.css";
 
 const socket = io(API_URL);
 
-import "./styles/panel.css"
-import Spinner from 'react-bootstrap/Spinner';
+export const Panel = () => {
 
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState([]);
+  const [isNewPost, setIsNewPost] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  /* ========================= */
+  /* SOCKET NUEVOS POSTS       */
+  /* ========================= */
 
-export const Panel = ({ setSelectedPost }) => {
-    const [posts, setPosts] = useState([]);
-    const [newPost, setNewPost] = useState([])
-    const [isNewPost, setIsNewPost] = useState(false)
-    const [loading, setLoading] = useState(true);
-
-
-    useEffect(() => {
+  useEffect(() => {
     socket.on("connect", () => {
+      console.log("Socket conectado");
     });
 
     socket.on("nuevo_post", (nuevoPost) => {
-      setNewPost(prev => [...prev, nuevoPost]);
-      setIsNewPost(true)
+      setNewPost((prev) => [...prev, nuevoPost]);
+      setIsNewPost(true);
     });
 
     return () => {
       socket.off("connect");
       socket.off("nuevo_post");
     };
-
   }, []);
 
-    useEffect(() => {
-        fetch(`${API_URL}/inicio`)
-            .then(res => res.json())
-            .then(data => {
-            setPosts(data);
-            setLoading(false);
-        })
-        .catch(err => {
-            console.error(err);
-            setLoading(false);
-        });
-    }, []);
+  /* ========================= */
+  /* TRAER POSTS               */
+  /* ========================= */
 
+  useEffect(() => {
+    fetch(`${API_URL}/posts`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
+  /* ========================= */
+  /* RENDER                    */
+  /* ========================= */
 
+  return (
+    <div>
 
+      {/* Botón cargar nuevos posts */}
+      <div className="cargarPost-contenedor">
+        {isNewPost && (
+          <p
+            className="cargarPost"
+            onClick={() => {
+              setIsNewPost(false);
+              setPosts((prev) => [...newPost, ...prev]);
+              setNewPost([]);
+            }}
+          >
+            Cargar nuevos Post
+          </p>
+        )}
+      </div>
 
-
-    return (
-
-        <div>
-            <div className="cargarPost-contenedor">
-            {isNewPost ? <p className="cargarPost" onClick={() =>  {setIsNewPost(false);
-                                            setPosts(prev => [...prev, ...newPost]);
-                                            setNewPost([]);}
-            }>Cargar nuevos Post</p> : null}
-            </div>
-
-
-            {loading ?           <div className="spinner-div"> 
-                                        <Spinner animation="border" className="spinner" role="status" variant="light">
-                                        </Spinner> 
-                                    </div>
-                                     : null}
-
-        <div className="panel">
-            
-  
-
-            {
-            posts.map(post => (
-
-                <div className="image_panel" onClick={() => setSelectedPost(post)} key={post.id}>
-
-                    {post.image && (
-                        <img className="imagen_post"
-                            src={post.image}
-                            alt="post"
-                            width={"250px"}
-                            height={"250px"}
-                        />
-                    )}
-                    <h2 className="name_post" >{post.name}</h2>
-                </div>
-            ))}
-
+      {/* Spinner */}
+      {loading && (
+        <div className="spinner-div">
+          <Spinner
+            animation="border"
+            className="spinner"
+            role="status"
+            variant="light"
+          />
         </div>
-        </div>
-        
-    );
+      )}
+
+      {/* Panel de posts */}
+      <div className="panel">
+        {posts.map((post) => (
+          <Link
+            to={`/post/${post.id}`}
+            className="image_panel"
+            key={post.id}
+          >
+            {post.image && (
+              <img
+                className="imagen_post"
+                src={post.image}
+                alt="post"
+                width="250"
+                height="250"
+              />
+            )}
+
+            <h2 className="name_post">{post.name}</h2>
+          </Link>
+        ))}
+      </div>
+
+    </div>
+  );
 };

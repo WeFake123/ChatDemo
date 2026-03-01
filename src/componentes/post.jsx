@@ -1,65 +1,89 @@
 import "./styles/post.css";
 import { API_URL, BD_URL } from "../../config";
 import { useEffect, useState, useMemo, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 import Spinner from "react-bootstrap/Spinner";
 import { ImageModal } from "./modal";
 
+export const Post = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-export const Post = ({ post, onClose }) => {
   const socketRef = useRef(null);
   const bottomRef = useRef(null);
+  const [highlightUser, setHighlightUser] = useState(null);
 
+  const [post, setPost] = useState(null);
   const [msj, setMsj] = useState("");
   const [chats, setChats] = useState([]);
   const [reply, setReply] = useState("");
-  const [newChats, setNewChats] = useState([]);
-  const [isNewChat, setIsNewChat] = useState(false);
+
   const [imagePost, setImagePost] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const [loadingPost, setLoadingPost] = useState(true);
+  const [loadingChats, setLoadingChats] = useState(true);
   const [sending, setSending] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState(null);
+
+
 
   /* ========================= */
   /* SOCKET                    */
   /* ========================= */
 
+useEffect(() => {
+  socketRef.current = io(API_URL);
+
+  socketRef.current.on("nuevo_mensaje", (nuevoChat) => {
+    if (nuevoChat.idPost?.toString() === id) {
+      setChats((prev) => [...prev, nuevoChat]);
+    }
+  });
+
+  return () => {
+    socketRef.current.disconnect();
+  };
+}, [id]);
+  /* ========================= */
+  /* TRAER POST                */
+  /* ========================= */
+
   useEffect(() => {
-    socketRef.current = io(API_URL);
+    setLoadingPost(true);
 
-    socketRef.current.on("connect", () => {
-      console.log("Conectado:", socketRef.current.id);
-    });
-
-    socketRef.current.on("nuevo_mensaje", (nuevoChat) => {
-      setNewChats((prev) => [...prev, nuevoChat]);
-      setIsNewChat(true);
-    });
-
-    return () => {
-      socketRef.current.disconnect();
-    };
-  }, []);
+    fetch(`${API_URL}/posts/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPost(data);
+        setLoadingPost(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoadingPost(false);
+      });
+  }, [id]);
 
   /* ========================= */
   /* TRAER MENSAJES            */
   /* ========================= */
 
   useEffect(() => {
-    setLoading(true);
+    setLoadingChats(true);
 
-    fetch(`${API_URL}/inicio/${post.id}`)
+    fetch(`${API_URL}/posts/${id}/chat`)
       .then((res) => res.json())
       .then((data) => {
         setChats(data);
-        setLoading(false);
+        setLoadingChats(false);
       })
       .catch((err) => {
         console.error(err);
-        setLoading(false);
+        setLoadingChats(false);
       });
-  }, [post.id]);
+  }, [id]);
 
   /* ========================= */
   /* AUTO SCROLL               */
@@ -89,13 +113,13 @@ export const Post = ({ post, onClose }) => {
       return;
     }
 
-const serialMsj = Date.now().toString().slice(-6);
+    const serialMsj = Date.now().toString().slice(-6);
+
     try {
       setSending(true);
 
       let imageUrl = null;
 
-      // Subir imagen si existe
       if (imagePost) {
         const cloudFormData = new FormData();
         cloudFormData.append("file", imagePost);
@@ -107,23 +131,18 @@ const serialMsj = Date.now().toString().slice(-6);
           body: cloudFormData,
         });
 
-        if (!cloudResponse.ok) {
-          throw new Error("Error subiendo imagen");
-        }
-
         const cloudData = await cloudResponse.json();
         imageUrl = cloudData.secure_url;
       }
 
-      // Enviar comentario
-      const response = await fetch(`${API_URL}/inicio/${post.id}`, {
+      const response = await fetch(`${API_URL}/posts/${id}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           data: msj,
-          idPost: post.id,
+          idPost: id,
           serial: serialMsj,
           replyTo: reply,
           image: imageUrl,
@@ -131,7 +150,7 @@ const serialMsj = Date.now().toString().slice(-6);
       });
 
       if (!response.ok) {
-        throw new Error("Error enviando comentario");
+        throw new Error();
       }
 
       toast.success("Comentario enviado 🚀");
@@ -140,7 +159,6 @@ const serialMsj = Date.now().toString().slice(-6);
       setImagePost(null);
 
     } catch (error) {
-      console.error(error);
       toast.error("Error enviando comentario");
     } finally {
       setSending(false);
@@ -151,15 +169,39 @@ const serialMsj = Date.now().toString().slice(-6);
   /* SCROLL A MENSAJE          */
   /* ========================= */
 
-  const goToChat = (serial) => {
-    const el = document.getElementById(`chat-${serial}`);
+  const goToChat = (chatId) => {
+    const el = document.getElementById(`chat-${chatId}`);
     if (!el) return;
 
     el.scrollIntoView({ behavior: "smooth", block: "center" });
-
     el.classList.add("highlight");
     setTimeout(() => el.classList.remove("highlight"), 1200);
   };
+
+  /* ========================= */
+  /* SPINNER GLOBAL POST       */
+  /* ========================= */
+
+  if (loadingPost) {
+    return (
+      <div className="spinner-div">
+        <Spinner
+          animation="border"
+          className="spinner"
+          role="status"
+          variant="light"
+        />
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="spinner-div">
+        <p style={{ color: "white" }}>Post no encontrado</p>
+      </div>
+    );
+  }
 
   /* ========================= */
   /* RENDER                    */
@@ -167,52 +209,55 @@ const serialMsj = Date.now().toString().slice(-6);
 
   return (
     <div className="postInterfaz">
-    
+
+      
+
       <div className="post">
-
-        <div>
-
-
-          <h1 className="titlePost">{post.name}</h1>
-        </div>
+        <button
+        className="btnVolver"
+        onClick={() => navigate("/")}
+      >
+        ← Volver
+      </button>
+        <h1 className="titlePost">{post.name}</h1>
 
         <div className="dataPost">
-          <img
-            className="postImage"
-            src={post.image}
-            alt={post.name}
-            onClick={() => setSelectedImage(post.image)}
-  style={{ cursor: "pointer" }}
-          />
-                <ImageModal
-        image={selectedImage}
-        onClose={() => setSelectedImage(null)}
-      />
+          {post.image && (
+            <img
+              className="postImage"
+              src={post.image}
+              alt={post.name}
+              onClick={() => setSelectedImage(post.image)}
+              style={{ cursor: "pointer" }}
+            />
+          )}
 
           <p className="text">{post.text}</p>
         </div>
       </div>
 
       <div className="chat">
-        {reply && (
-          <div className="formChat-reply">
-            <p
-              className="formChat-reply-text"
-              onClick={() => goToChat(reply)}
-            >
-              responderle a {reply}
-            </p>
-
-            <p
-              className="formChat-reply-cancel"
-              onClick={() => setReply("")}
-            >
-              cancelar
-            </p>
-          </div>
-        )}
 
         <form className="formChat-post" onSubmit={comentar}>
+
+          {reply && (
+    <div className="reply-preview">
+      <span>
+        Respondiendo a: &gt;&gt;
+        {chats.find(c => c.id.toString() === reply.toString())?.serial}
+      </span>
+
+      <button
+  type="button"
+  onClick={() => {
+    setReply("");
+    setHighlightUser(null);
+  }}
+>
+  ✕
+</button>
+    </div>
+  )}
           <input
             className="contenidosInput-post"
             type="text"
@@ -237,22 +282,8 @@ const serialMsj = Date.now().toString().slice(-6);
         </form>
 
         <div className="chat-mensajes">
-          <div className="cargarPost-contenedor">
-            {isNewChat && (
-              <p
-                className="cargarPost"
-                onClick={() => {
-                  setIsNewChat(false);
-                  setChats((prev) => [...prev, ...newChats]);
-                  setNewChats([]);
-                }}
-              >
-                Cargar mensajes nuevos
-              </p>
-            )}
-          </div>
 
-          {loading && (
+          {loadingChats && (
             <div className="spinner-div">
               <Spinner
                 animation="border"
@@ -263,59 +294,75 @@ const serialMsj = Date.now().toString().slice(-6);
             </div>
           )}
 
-          {!loading && reversedChats.length === 0 && (
+          {!loadingChats && reversedChats.length === 0 && (
             <p className="sinComentariosTexto">
               Sé el primero en comentar…
             </p>
           )}
 
-          {reversedChats.map(
-            ({ data, id, serial, replyTo, image }) => (
-              <div
-                className="mensaje"
-                key={id}
-                id={`chat-${serial}`}
-              >
-                <p
-                  className="mensaje-serial"
-                  onClick={() => setReply(serial)}
-                >
-                  {`>>${serial}`}
-                </p>
+          {!loadingChats &&
+  reversedChats.map((chat) => {
 
-                {replyTo && (
-                  <p
-                    className="mensaje-reply"
-                    onClick={() => goToChat(replyTo)}
-                  >
-                    {`>>${replyTo}`}
-                  </p>
-                )}
+    const { data, id, serial, replyTo, image, authorHash } = chat;
 
-                {image && (
-                  <img
-                    src={image}
-                    alt="chat"
-                    className="chatImage"
-                    onClick={() => setSelectedImage(image)}
-  style={{ cursor: "pointer" }}
-                  />
-                  
-                )}
-                <ImageModal
-        image={selectedImage}
-        onClose={() => setSelectedImage(null)}
-      />
+    const mensajeRespondido = chats.find(
+  (c) => c.id.toString() === replyTo?.toString()
+    );
 
-                <p className="mensaje-texto">{data}</p>
-              </div>
-            )
-          )}
+    return (
+      <div
+  className={`mensaje ${
+    highlightUser === chat.authorHash ? "highlight-user" : ""
+  }`}
+  key={id}
+  id={`chat-${id}`}
+>
+
+        <p
+          className="mensaje-serial"
+          onClick={() => {
+    setReply(id);
+    setHighlightUser(prev =>
+      prev === chat.authorHash ? null : chat.authorHash
+    );
+  }}
+        >
+          {`>>${serial}`}
+        </p>
+
+        {replyTo && mensajeRespondido && (
+          <p
+            className="mensaje-reply"
+            onClick={() => goToChat(replyTo)}
+          >
+            {`>>${mensajeRespondido.serial}`}
+          </p>
+        )}
+
+        {image && (
+          <img
+            src={image}
+            alt="chat"
+            className="chatImage"
+            onClick={() => setSelectedImage(image)}
+            style={{ cursor: "pointer" }}
+          />
+        )}
+
+        <p className="mensaje-texto">{data}</p>
+
+      </div>
+    );
+  })}
 
           <div ref={bottomRef} />
         </div>
       </div>
 
+      <ImageModal
+        image={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
     </div>
   );
 };

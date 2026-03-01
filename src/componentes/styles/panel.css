@@ -29,12 +29,10 @@
 }
 
 .image_panel {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    cursor: pointer;
-        animation: fadeIn 0.4s ease forwards;
-
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
 }
 
 @keyframes fadeIn {

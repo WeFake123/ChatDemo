@@ -47,7 +47,7 @@ export const NewPost = () => {
       const imageUrl = cloudData.secure_url;
 
       // 2️⃣ Crear post
-      const response = await fetch(`${API_URL}/inicio`, {
+      const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

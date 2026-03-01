@@ -110,6 +110,12 @@ footer {
 /* ========= MARQUEE =========== */
 /* ============================= */
 
+.logo {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 .marquee {
   width: 100%;
   overflow: hidden;
