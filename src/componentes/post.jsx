@@ -238,9 +238,7 @@ useEffect(() => {
 
       <div className="chat">
 
-        <form className="formChat-post" onSubmit={comentar}>
-
-          {reply && (
+        {reply && (
     <div className="reply-preview">
       <span>
         Respondiendo a: &gt;&gt;
@@ -258,6 +256,10 @@ useEffect(() => {
 </button>
     </div>
   )}
+
+        <form className="formChat-post" onSubmit={comentar}>
+
+          
           <input
             className="contenidosInput-post"
             type="text"
