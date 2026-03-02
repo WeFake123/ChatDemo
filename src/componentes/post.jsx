@@ -1,5 +1,5 @@
 import "./styles/post.css";
-import { API_URL, BD_URL } from "../../config";
+import { API_URL, BD_URL } from "../config";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";

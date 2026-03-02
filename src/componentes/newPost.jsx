@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./styles/newPost.css";
-import { API_URL, BD_URL } from "../../config";
+import { API_URL, BD_URL } from "../config";
 import toast, { Toaster } from "react-hot-toast";
 
 export const NewPost = () => {

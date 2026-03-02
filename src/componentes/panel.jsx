@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API_URL } from "../../config";
+import { API_URL } from "../config";
 import { io } from "socket.io-client";
 import Spinner from "react-bootstrap/Spinner";
 import "./styles/panel.css";
