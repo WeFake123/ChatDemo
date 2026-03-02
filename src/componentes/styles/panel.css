@@ -98,6 +98,14 @@
     .name_post {
         opacity: 1;
     }
+
+}
+@media (max-width: 768px) {
+
+   .panel{
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+   }
 }
 
 /* ============================= */

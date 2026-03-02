@@ -56,7 +56,7 @@ export const Panel = () => {
   /* ========================= */
 
   return (
-    <div>
+    <div className="panel-general">
 
       {/* Botón cargar nuevos posts */}
       <div className="cargarPost-contenedor">
