@@ -69,7 +69,12 @@ export const NewPost = () => {
         throw new Error("Error al crear el post");
       }
 
-      await response.json();
+
+
+const data = await response.json();
+
+// 🔥 guardar el hash que genera el backend
+localStorage.setItem("authorHash", data.authorHash);
 
       // Reset
       setTitlePost("");
